@@ -1,0 +1,172 @@
+{% load i18n static %}
+{% get_current_language as CURRENT_LANGUAGE %}
+
+<header class="site-header">
+    <div class="site-header__main">
+        <nav class="navbar navbar-expand-lg navbar-light site-header__nav" aria-label="{% trans 'Основное меню' %}">
+            <div class="site-container site-header__bar">
+                {% url 'main:home' as home_url %}
+                {% url 'main:about' as about_url %}
+                {% url 'main:works' as works_url %}
+                {% url 'main:press' as press_url %}
+                {% url 'main:career' as career_url %}
+                {% url 'main:contacts' as contacts_url %}
+                {% with current_name=request.resolver_match.url_name %}
+                <a class="site-header__brand" href="{% url 'main:home' %}">
+                    <span class="site-header__logo-mark" aria-hidden="true">
+                        <img class="site-header__logo-img" src="{% static 'img/logo-bull.png' %}" alt="">
+                    </span>
+                    <span class="site-header__brand-text">
+                        <span class="site-header__logo-title">{% if brand %}{{ brand.brand_name }}{% else %}{% trans "БЫКОВОГАЗ" %}{% endif %}</span>
+                        <span class="site-header__logo-tagline">{% if brand %}{{ brand.header_tagline }}{% else %}{% trans "Добыча углеводородного сырья" %}{% endif %}</span>
+                    </span>
+                </a>
+
+                <button
+                    class="navbar-toggler site-header__toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#siteNavbar"
+                    aria-controls="siteNavbar"
+                    aria-expanded="false"
+                    aria-label="{% trans 'Открыть меню' %}"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse site-header__collapse ms-lg-auto" id="siteNavbar">
+                    <ul class="navbar-nav site-header__menu">
+                        <li class="nav-item">
+                            <a
+                                class="nav-link site-header__link{% if current_name == 'home' %} site-header__link--active{% endif %}"
+                                href="{{ home_url }}"
+                                {% if current_name == 'home' %}aria-current="page"{% endif %}
+                            >
+                                {% trans "Главная" %}
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle site-header__link{% if current_name == 'about' or current_name == 'about_company' or current_name == 'about_field' or current_name == 'about_team' or current_name == 'about_license' or current_name == 'about_tour' %} site-header__link--active{% endif %}"
+                                href="{{ about_url }}"
+                                id="navAbout"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside"
+                                aria-expanded="false"
+                            >
+                                {% trans "О нас" %}
+                            </a>
+                            <ul class="dropdown-menu site-header__dropdown" aria-labelledby="navAbout">
+                                <li><a class="dropdown-item" href="{% url 'main:about_company' %}">{% trans "О компании" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'main:about_field' %}">{% trans "О месторождении" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'main:about_team' %}">{% trans "Состав команды" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'main:about_license' %}">{% trans "Лицензия" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'main:about_tour' %}">{% trans "Виртуальный тур" %}</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link site-header__link{% if current_name == 'works' %} site-header__link--active{% endif %}"
+                                href="{{ works_url }}"
+                                {% if current_name == 'works' %}aria-current="page"{% endif %}
+                            >{% trans "Наши работы" %}</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle site-header__link{% if current_name == 'press' or current_name == 'press_news' or current_name == 'press_gallery' or current_name == 'press_news_gallery' %} site-header__link--active{% endif %}"
+                                href="{{ press_url }}"
+                                id="navPress"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside"
+                                aria-expanded="false"
+                            >
+                                {% trans "Пресс-центр" %}
+                            </a>
+                            <ul class="dropdown-menu site-header__dropdown" aria-labelledby="navPress">
+                                <li><a class="dropdown-item" href="{% url 'main:press_news' %}">{% trans "Новости" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'main:press_news_gallery' %}">{% trans "Галерея" %}</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link site-header__link{% if current_name == 'career' %} site-header__link--active{% endif %}" href="{{ career_url }}">{% trans "Карьера" %}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link site-header__link{% if current_name == 'contacts' %} site-header__link--active{% endif %}" href="{{ contacts_url }}">{% trans "Контакты" %}</a>
+                        </li>
+                        <li class="nav-item site-header__language-item">
+                            <form class="site-language-switch" action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                {% if CURRENT_LANGUAGE == 'en' %}
+                                    <input type="hidden" name="language" value="ru">
+                                    <input
+                                        type="hidden"
+                                        name="next"
+                                        value="{% if request.get_full_path == '/en/' %}/{% else %}{{ request.get_full_path|slice:'3:' }}{% endif %}"
+                                    >
+                                {% else %}
+                                    <input type="hidden" name="language" value="en">
+                                    <input
+                                        type="hidden"
+                                        name="next"
+                                        value="{% if request.get_full_path == '/' %}/en/{% else %}/en{{ request.get_full_path }}{% endif %}"
+                                    >
+                                {% endif %}
+                                <button
+                                    class="site-header__utility-button site-header__utility-button--language"
+                                    type="submit"
+                                    aria-label="{% trans 'Переключить язык сайта' %}"
+                                    title="{% trans 'Переключить язык сайта' %}"
+                                >
+                                    {% if CURRENT_LANGUAGE == 'en' %}
+                                        <img
+                                            class="site-header__utility-flag"
+                                            src="{% static 'img/flags/gb.svg' %}"
+                                            alt=""
+                                            aria-hidden="true"
+                                        >
+                                        <span class="site-header__utility-label">{% trans "English" %}</span>
+                                    {% else %}
+                                        <img
+                                            class="site-header__utility-flag"
+                                            src="{% static 'img/flags/ru.svg' %}"
+                                            alt=""
+                                            aria-hidden="true"
+                                        >
+                                        <span class="site-header__utility-label">{% trans "Русский" %}</span>
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </li>
+                        <li class="nav-item site-header__theme-item">
+                            <div class="site-theme-switch">
+                                <button
+                                    class="site-header__utility-button site-header__utility-button--theme"
+                                    type="button"
+                                    data-theme-toggle
+                                    data-label-light="{% trans 'Светлая тема' %}"
+                                    data-label-dark="{% trans 'Тёмная тема' %}"
+                                    aria-label="{% trans 'Переключить тему сайта' %}"
+                                    title="{% trans 'Переключить тему сайта' %}"
+                                >
+                                    <span class="site-header__utility-theme-icon" aria-hidden="true">
+                                        <svg class="site-header__theme-icon site-header__theme-icon--light" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="4.25" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+                                            <path d="M12 2.75v2.5M12 18.75v2.5M21.25 12h-2.5M5.25 12h-2.5M18.54 5.46l-1.77 1.77M7.23 16.77l-1.77 1.77M18.54 18.54l-1.77-1.77M7.23 7.23L5.46 5.46" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path>
+                                        </svg>
+                                        <svg class="site-header__theme-icon site-header__theme-icon--dark" viewBox="0 0 24 24">
+                                            <path d="M14.5 2.9a8.8 8.8 0 1 0 6.6 14.5A9.6 9.6 0 0 1 14.5 2.9Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="site-header__utility-label" data-theme-label>{% trans "Светлая тема" %}</span>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                {% endwith %}
+            </div>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,20 @@
+# Скопировать на сервер: /etc/caddy/Caddyfile
+# Перед запуском: DNS A-запись bykovogazzz.ru и www → 84.54.59.117; порты 80/443 открыты в SberCloud.
+# Gunicorn должен слушать 127.0.0.1:8000 (см. deploy/gunicorn.service.example).
+# При apt install caddy на вопрос про Caddyfile — N (оставить эту версию), не Y.
+
+bykovogazzz.ru, www.bykovogazzz.ru {
+	encode gzip
+
+	handle_path /static/* {
+		root * /opt/BYKOVOGAZ/staticfiles
+		file_server
+	}
+
+	handle_path /media/* {
+		root * /opt/BYKOVOGAZ/media
+		file_server
+	}
+
+	reverse_proxy 127.0.0.1:8000
+}

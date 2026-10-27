@@ -1,0 +1,22 @@
+# /etc/systemd/system/gunicorn.service
+# DJANGO_SECRET_KEY — тот же, что в /opt/BYKOVOGAZ/.env
+# После правок: systemctl daemon-reload && systemctl enable gunicorn && systemctl restart gunicorn
+# Проверка: curl -I http://127.0.0.1:8000/
+
+[Unit]
+Description=Gunicorn BYKOVOGAZ
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/opt/BYKOVOGAZ
+Environment="DJANGO_SECRET_KEY=замените-на-секрет"
+Environment="DJANGO_DEBUG=False"
+Environment="DJANGO_ALLOWED_HOSTS=bykovogazzz.ru,www.bykovogazzz.ru,84.54.59.117,bykovogaz,localhost,127.0.0.1"
+Environment="DJANGO_CSRF_TRUSTED_ORIGINS=https://bykovogazzz.ru,https://www.bykovogazzz.ru"
+ExecStart=/opt/BYKOVOGAZ/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 config.wsgi:application
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

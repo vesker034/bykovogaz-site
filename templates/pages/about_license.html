@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Лицензия" %} | {% trans "БЫКОВОГАЗ" %}{% endblock %}
+
+{% block content %}
+<div class="page">
+    {% trans "Лицензия" as hero_title %}
+    {% trans "На разведку и добычу углеводородного сырья" as hero_lead %}
+    {% include "components/page_hero.html" with title=hero_title lead=hero_lead hero_class="page-hero--license" %}
+
+    <section class="section">
+        <div class="site-container">
+            <div class="license-page__card">
+                <div class="license-page__header">
+                    <div class="license-page__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="license-page__title">{% trans "Лицензия ВОЛ №01223 НЭ" %}</h2>
+                        <p class="license-page__meta">{% trans "От 22.04.2006" %}</p>
+                    </div>
+                </div>
+
+                <div class="license-page__details">
+                    <div class="license-page__detail">
+                        <h3 class="license-page__detail-title">{% trans "Лицензиат:" %}</h3>
+                        <p class="license-page__detail-text">{% trans "ООО «БЫКОВОГАЗ»." %}</p>
+                    </div>
+                    <div class="license-page__detail">
+                        <h3 class="license-page__detail-title">{% trans "Вид права:" %}</h3>
+                        <p class="license-page__detail-text">{% trans "Разведка и добыча углеводородного сырья." %}</p>
+                    </div>
+                    <div class="license-page__detail">
+                        <h3 class="license-page__detail-title">{% trans "Участок недр:" %}</h3>
+                        <p class="license-page__detail-text">
+                            {% trans "Южно-Кисловский участок недр, включающий Южно-Кисловское газоконденсатное месторождение." %}
+                        </p>
+                    </div>
+                    <div class="license-page__detail">
+                        <h3 class="license-page__detail-title">{% trans "Местоположение:" %}</h3>
+                        <p class="license-page__detail-text">
+                            {% trans "Быковский район Волгоградской области, 30 км к юго-востоку от р. п. Быково, левый берег Волги." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="license-page__document">
+                <h2 class="license-page__document-title">{% trans "Фотография лицензии" %}</h2>
+                <div class="license-sheet">
+                    <img
+                        class="license-sheet__photo"
+                        src="{% static 'img/license-scan.png' %}"
+                        alt="{% trans 'Скан лицензии на пользование недрами' %}"
+                    >
+                </div>
+            </div>
+
+            <div class="license-page__stats">
+                <div class="license-page__stat">
+                    <div class="license-page__stat-label">{% trans "Запасы газа" %}</div>
+                    <div class="license-page__stat-value">{% blocktrans trimmed %}3,857 млрд м<sup>3</sup>{% endblocktrans %}</div>
+                    <div class="license-page__stat-note">{% trans "Категория С1" %}</div>
+                </div>
+                <div class="license-page__stat">
+                    <div class="license-page__stat-label">{% trans "Запасы конденсата" %}</div>
+                    <div class="license-page__stat-value">{% trans "667 тыс. т" %}</div>
+                    <div class="license-page__stat-note">{% trans "Категория С1" %}</div>
+                </div>
+            </div>
+
+            <p class="license-page__footnote">
+                {% trans "Запасы утверждены на основании протокола ГКЗ России (протокол №18/799-пр от 01.12.2006 г.)." %}
+            </p>
+        </div>
+    </section>
+</div>
+{% endblock %}

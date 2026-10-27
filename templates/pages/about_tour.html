@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Виртуальный тур" %} | {% trans "БЫКОВОГАЗ" %}{% endblock %}
+
+{% block content %}
+<div class="page">
+    {% trans "Виртуальный тур" as hero_title %}
+    {% trans "Посетите наш офис виртуально" as hero_lead %}
+    {% include "components/page_hero.html" with title=hero_title lead=hero_lead hero_class="page-hero--tour" %}
+
+    <section class="section">
+        <div class="site-container">
+            <div class="tour-page__panel">
+                <div class="tour-page__badge">360°</div>
+                <h2 class="tour-page__title">{% trans "Виртуальная экскурсия по офису" %}</h2>
+                <p class="tour-page__lead">
+                    {% blocktrans trimmed %}Интерактивный 360°-обзор офиса: осмотрите рабочее пространство, перетаскивая
+                    изображение мышью или пальцем.{% endblocktrans %}
+                </p>
+
+                <div class="tour-page__viewer tour-page__viewer--embed" aria-label="{% trans 'Зона виртуального тура' %}">
+                    <iframe
+                        class="tour-page__iframe"
+                        src="{% static 'tours/office-tour/index.html' %}"
+                        title="{% trans 'Виртуальный тур 360° по офису' %}"
+                        loading="lazy"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+                <p class="tour-page__viewer-note">
+                    {% blocktrans trimmed %}Для полноэкранного режима используйте кнопку в правом верхнем углу тура
+                    или полноэкранный режим браузера для области просмотра.{% endblocktrans %}
+                </p>
+            </div>
+
+            <div class="tour-page__zones">
+                <h2 class="section__title text-center">{% trans "Основные зоны офиса" %}</h2>
+                <div class="tour-page__grid">
+                    {% for zone in tour_zones %}
+                    <article class="tour-card">
+                        <div class="tour-card__media tour-card__media--{{ zone.css_modifier }}" role="img" aria-label="{{ zone.title }}"></div>
+                        <div class="tour-card__body">
+                            <h3 class="tour-card__title">{{ zone.title }}</h3>
+                            <p class="tour-card__text">{{ zone.intro }}</p>
+                            <ul class="tour-card__list">
+                                {% for line in zone.bullets %}
+                                <li>{{ line }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+{% endblock %}
